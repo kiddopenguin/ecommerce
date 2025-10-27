@@ -31,20 +31,3 @@ $router->group('admin/products', function ($router, $prefix) {
     // delete
     $router->add('GET', "$prefix/delete/{id}", 'ProductController@delete');
 });
-
-
-
-// create
-$router->add('GET', 'admin/products/create', 'ProductController@create');
-
-// cadastrar
-// $router->add('POST', 'admin/products/store', 'ProductController@store');
-
-// edit
-$router->add('GET', 'admin/products/edit/{id}', 'ProductController@edit');
-
-// update
-$router->add('POST', 'admin/products/update/{id}', 'ProductController@update');
-
-// delete
-$router->add('GET', 'admin/products/delete/{id}', 'ProductController@delete');

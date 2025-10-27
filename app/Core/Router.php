@@ -11,12 +11,13 @@ class Router
 
     private $routes = [];
 
-    public function add($method, $route, $action)
+    public function add($method, $route, $action, $middleware = null)
     {
         $this->routes[] = [
             'method' => strtoupper($method),
             'route' => trim($route, '/'),
-            'action' => $action
+            'action' => $action,
+            'middleware' => $middleware
         ];
     }
 
@@ -25,20 +26,22 @@ class Router
     {
         $uri = $_GET['url'] ?? '/';
         $uri = trim($uri, '/');
-
         $method = $_SERVER['REQUEST_METHOD'];
 
-
-
-
         foreach ($this->routes as $route) {
+            if ($route['method'] !== $method) continue;
 
-            // Transformando as rotas em Regex para capturar parâmetros
             $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route['route']);
             $pattern = "#^{$pattern}$#";
 
-            if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
-                array_shift($matches); // Remove o primeiro elemento que é a string inteira
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches); // Remove o match completo
+
+                // Se houver middleware, executa antes da ação
+                if ($route['middleware']) {
+                    call_user_func($route['middleware']);
+                }
+
                 return $this->callAction($route['action'], $matches);
             }
         }
@@ -67,5 +70,9 @@ class Router
         }
 
         throw new \Exception("Rota Inválida");
+    }
+
+    public function group($prefix, $callback) {
+        $callback($this, trim($prefix, '/'));
     }
 }

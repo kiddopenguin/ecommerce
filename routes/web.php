@@ -17,14 +17,28 @@ $router->add('GET', 'sobre', 'HomeController@sobre');
 
 // Painel Administrativo
 
-// home
-$router->add('GET', 'admin/products', 'ProductController@index');
+$router->group('admin/products', function ($router, $prefix) {
+    // index
+    $router->add('GET', "$prefix", 'ProductController@index');
+    // create
+    $router->add('GET', "$prefix/create", 'ProductController@create');
+    // cadastrar
+    $router->add('POST', "$prefix/store", 'ProductController@store');
+    // edit
+    $router->add('GET', "$prefix/edit/{id}", 'ProductController@edit');
+    // update
+    $router->add('GET', "$prefix/update/{id}", 'ProductController@update');
+    // delete
+    $router->add('GET', "$prefix/delete/{id}", 'ProductController@delete');
+});
+
+
 
 // create
 $router->add('GET', 'admin/products/create', 'ProductController@create');
 
 // cadastrar
-$router->add('POST', 'admin/products/store', 'ProductController@store');
+// $router->add('POST', 'admin/products/store', 'ProductController@store');
 
 // edit
 $router->add('GET', 'admin/products/edit/{id}', 'ProductController@edit');

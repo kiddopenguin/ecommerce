@@ -5,6 +5,14 @@
 
 use App\Core\Router;
 
+$authMiddleware = function () {
+    if (!isset($_SESSION['user'])) {
+        header('Location: ?url=/');
+        exit;
+    }
+};
+
+
 $router = new Router;
 
 // Rotas Públicas
@@ -17,17 +25,17 @@ $router->add('GET', 'sobre', 'HomeController@sobre');
 
 // Painel Administrativo
 
-$router->group('admin/products', function ($router, $prefix) {
+$router->group('admin/products', function ($router, $prefix) use ($authMiddleware) {
     // index
-    $router->add('GET', "$prefix", 'ProductController@index');
+    $router->add('GET', "$prefix", 'ProductController@index', $authMiddleware);
     // create
-    $router->add('GET', "$prefix/create", 'ProductController@create');
+    $router->add('GET', "$prefix/create", 'ProductController@create', $authMiddleware);
     // cadastrar
-    $router->add('POST', "$prefix/store", 'ProductController@store');
+    $router->add('POST', "$prefix/store", 'ProductController@store', $authMiddleware);
     // edit
-    $router->add('GET', "$prefix/edit/{id}", 'ProductController@edit');
+    $router->add('GET', "$prefix/edit/{id}", 'ProductController@edit', $authMiddleware);
     // update
-    $router->add('GET', "$prefix/update/{id}", 'ProductController@update');
+    $router->add('GET', "$prefix/update/{id}", 'ProductController@update', $authMiddleware);
     // delete
-    $router->add('GET', "$prefix/delete/{id}", 'ProductController@delete');
+    $router->add('GET', "$prefix/delete/{id}", 'ProductController@delete', $authMiddleware);
 });

@@ -7,7 +7,7 @@ use App\Core\Router;
 
 $authMiddleware = function () {
     if (!isset($_SESSION['user'])) {
-        header('Location: ?url=/');
+        header('Location: ?url=auth/login');
         exit;
     }
 };
@@ -23,6 +23,11 @@ $router->add('GET', '/', 'HomeController@index');
 // /sobre
 $router->add('GET', 'sobre', 'HomeController@sobre');
 
+// Login/Logout
+$router->add('GET', 'auth/login', 'AuthController@loginForm');
+$router->add('POST', 'login', 'AuthController@login');
+$router->add('GET', 'logout', 'AuthController@logout');
+
 // Painel Administrativo
 
 $router->group('admin/products', function ($router, $prefix) use ($authMiddleware) {
@@ -35,7 +40,7 @@ $router->group('admin/products', function ($router, $prefix) use ($authMiddlewar
     // edit
     $router->add('GET', "$prefix/edit/{id}", 'ProductController@edit', $authMiddleware);
     // update
-    $router->add('GET', "$prefix/update/{id}", 'ProductController@update', $authMiddleware);
+    $router->add('POST', "$prefix/update/{id}", 'ProductController@update', $authMiddleware);
     // delete
     $router->add('GET', "$prefix/delete/{id}", 'ProductController@delete', $authMiddleware);
 });

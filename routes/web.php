@@ -6,7 +6,7 @@
 use App\Core\Router;
 
 $authMiddleware = function () {
-    if (!isset($_SESSION['user'])) {
+    if (isset($_SESSION['user'])) {
         header('Location: ?url=auth/login');
         exit;
     }
@@ -27,6 +27,11 @@ $router->add('GET', 'sobre', 'HomeController@sobre');
 $router->add('GET', 'auth/login', 'AuthController@loginForm');
 $router->add('POST', 'login', 'AuthController@login');
 $router->add('GET', 'logout', 'AuthController@logout');
+
+// Cadastro
+
+$router->add('GET', 'auth/register', 'AuthController@registerForm');
+$router->add('POST', 'register', 'AuthController@register');
 
 // Painel Administrativo
 

@@ -14,7 +14,7 @@ class User {
     }
 
     public function findByEmail($email) {
-        $stmt = $this->pdo->prepare("SELECT * FROM tb_users WHERE email = :email");
+        $stmt = $this->pdo->prepare("SELECT * FROM tb_users WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

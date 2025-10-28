@@ -8,7 +8,7 @@ ob_start();
     <div class="container py-4">
         <div class="row align-items-center">
             <div class="col">
-                <h1 class="h2 mb-0 text-white">Painel de Produtos</h1>
+                <h1 class="h2 mb-0 text-dark">Painel de Produtos</h1>
             </div>
             <div class="col-auto">
                 <a href="?url=admin/products/create" class="btn btn-light">

@@ -117,4 +117,15 @@ class UserController
         header('Location: ?url=admin/users');
         exit;
     }
+
+    public function show($id)
+    {
+        $user = $this->userModel->find($id);
+        if (!$user) {
+            $_SESSION['error'] = "Usuário não encontrado.";
+            header('Location: ?url=admin/users');
+            exit;
+        }
+        $this->render('show', compact('user'));
+    }
 }

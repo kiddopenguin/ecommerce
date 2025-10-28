@@ -114,6 +114,55 @@ body {
     margin-bottom: 2rem;
 }
 
+/* Global admin header title: use theme variable and center text while keeping action column right-aligned */
+.admin-header {
+    /* enable positioning context for centering */
+    position: relative;
+}
+
+.admin-header h1 {
+    color: var(--dark-bg);
+    margin: 0;
+    /* center visually within the header regardless of column widths */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.admin-header .col-auto {
+    /* keep actions aligned right but positioned absolutely to avoid shifting the title */
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Responsive fallback: on small screens stack elements and let normal flow center the title */
+@media (max-width: 768px) {
+    .admin-header h1 {
+        position: static;
+        transform: none;
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+
+    .admin-header .col-auto {
+        position: static;
+        transform: none;
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .admin-header .row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container {

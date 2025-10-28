@@ -1,98 +1,58 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-
-
-$errors = $_SESSION['errors'] ?? [];
-unset($_SESSION['errors']);
+$title = 'Cadastro - E-commerce';
+ob_start();
 
 $old = $_SESSION['old'] ?? [];
-unset($_SESSION['old']);
-
-$success = $_SESSION['success'] ?? '';
-unset($_SESSION['success']);
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title text-center mb-4">Criar Conta</h2>
+                
+                <form action="?url=register" method="POST" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               value="<?= htmlspecialchars($old['name'] ?? '') ?>">
+                    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Conta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f4f8;
-        }
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" required 
+                               value="<?= htmlspecialchars($old['email'] ?? '') ?>">
+                    </div>
 
-        .form-card {
-            max-width: 480px;
-            margin: 5% auto;
-            padding: 1.75rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.06);
-        }
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               required minlength="6">
+                        <div class="form-text">A senha deve ter pelo menos 6 caracteres</div>
+                    </div>
 
-        .brand {
-            color: #0d6efd;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-    </style>
-</head>
+                    <div class="mb-3">
+                        <label for="password_confirm" class="form-label">Confirmar Senha</label>
+                        <input type="password" class="form-control" id="password_confirm" 
+                               name="password_confirm" required minlength="6">
+                    </div>
 
-<body>
-    <div class="form-card">
-        <h3 class="brand">Criar Conta</h3>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                    </div>
+                </form>
 
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
-
-        <?php if (!empty($errors)): ?>
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    <?php foreach ($errors as $err): ?>
-                        <li><?= htmlspecialchars($err) ?></li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="text-center mt-4">
+                    <p class="mb-0">Já tem uma conta? 
+                        <a href="?url=auth/login" class="text-primary text-decoration-none">Fazer login</a>
+                    </p>
+                </div>
             </div>
-        <?php endif; ?>
-
-        <form action="?url=register" method="POST" novalidate>
-            <div class="mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($old['name'] ?? '') ?>">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($old['email'] ?? '') ?>">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" name="password" class="form-control" required minlength="6">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Confirmar Senha</label>
-                <input type="password" name="password_confirm" class="form-control" required minlength="6">
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Criar conta</button>
-        </form>
-
-        <p class="mt-3 text-center">
-            Já tem conta? <a href="?url=auth/login">Entrar</a>
-        </p>
+        </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../layouts/base.php';
+?>

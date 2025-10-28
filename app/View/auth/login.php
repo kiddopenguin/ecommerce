@@ -1,72 +1,42 @@
 <?php
-// login.php
-// Não chamamos session_start() aqui, o controller já iniciou a sessão
-$error = $_SESSION['error'] ?? '';
-unset($_SESSION['error']);
+$title = 'Login - E-commerce';
+ob_start();
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f4f8; /* tom frio */
-            height: 100vh;
-        }
-        .login-container {
-            max-width: 400px;
-            margin: 5% auto;
-            padding: 2rem;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .login-title {
-            color: #0d6efd; /* azul frio */
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .btn-login {
-            background-color: #0d6efd;
-            border: none;
-        }
-        .btn-login:hover {
-            background-color: #0b5ed7;
-        }
-    </style>
-</head>
-<body>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title text-center mb-4">Login</h2>
+                
+                <form action="?url=login" method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" required 
+                               value="<?= $_SESSION['old']['email'] ?? '' ?>">
+                    </div>
 
-<div class="login-container shadow-sm">
-    <h2 class="login-title">Login</h2>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
 
-    <?php if($error): ?>
-        <div class="alert alert-danger">
-            <?= htmlspecialchars($error) ?>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">Ainda não tem uma conta? 
+                        <a href="?url=auth/register" class="text-primary text-decoration-none">Cadastre-se</a>
+                    </p>
+                </div>
+            </div>
         </div>
-    <?php endif; ?>
-
-    <form action="?url=login" method="POST">
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" id="email" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Senha</label>
-            <input type="password" name="password" class="form-control" id="password" required>
-        </div>
-
-        <button type="submit" class="btn btn-login w-100">Entrar</button>
-    </form>
+    </div>
 </div>
 
-<!-- Bootstrap JS (opcional, caso use componentes JS) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../layouts/base.php';
+?>

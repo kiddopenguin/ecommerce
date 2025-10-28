@@ -1,69 +1,93 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
-$success = $_SESSION['success'] ?? '';
-unset($_SESSION['success']);
+$title = 'Gerenciar Usuários - Admin';
+ob_start();
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Gerenciar Usuários</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-primary fw-bold">Gerenciar Usuários</h1>
-            <a href="?url=admin/users/create" class="btn btn-primary">+ Novo Usuário</a>
-        </div>
-
-        <?php if (!empty($success)): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
-
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <?php if (!empty($users)): ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">E-mail</th>
-                                    <th scope="col">Criado em</th>
-                                    <th scope="col" class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($users as $user): ?>
-                                    <tr>
-                                        <td><?= $user['id'] ?></td>
-                                        <td><?= htmlspecialchars($user['name']) ?></td>
-                                        <td><?= htmlspecialchars($user['email']) ?></td>
-                                        <td><?= date('d/m/Y H:i', strtotime($user['created_at'])) ?></td>
-                                        <td class="text-center">
-                                            <a href="?url=admin/users/edit/<?= $user['id'] ?>" class="btn btn-sm btn-outline-warning me-1">Editar</a>
-                                            <a href="?url=admin/users/delete/<?= $user['id'] ?>"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Tem certeza que deseja excluir este usuário?')">
-                                                Excluir
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php else: ?>
-                    <p class="text-muted text-center mb-0">Nenhum usuário encontrado.</p>
-                <?php endif; ?>
+<!-- Admin Header -->
+<div class="admin-header mb-4">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <h1 class="h2 mb-0 text-white">Gerenciar Usuários</h1>
+            </div>
+            <div class="col-auto">
+                <a href="?url=admin/users/create" class="btn btn-light">
+                    <i class="fas fa-user-plus"></i> Novo Usuário
+                </a>
             </div>
         </div>
     </div>
-</body>
+</div>
 
-</html>
+<div class="container">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <?php if (empty($users)): ?>
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <p class="h5 text-muted">Nenhum usuário cadastrado</p>
+                    <a href="?url=admin/users/create" class="btn btn-primary mt-3">
+                        Cadastrar Primeiro Usuário
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">ID</th>
+                                <th class="border-0">Nome</th>
+                                <th class="border-0">E-mail</th>
+                                <th class="border-0">Cadastrado em</th>
+                                <th class="border-0 text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $user): ?>
+                                <tr>
+                                    <td class="fw-bold"><?= $user['id'] ?></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-circle fa-lg text-muted me-2"></i>
+                                            <?= htmlspecialchars($user['name']) ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:<?= htmlspecialchars($user['email']) ?>" 
+                                           class="text-decoration-none">
+                                            <?= htmlspecialchars($user['email']) ?>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <i class="far fa-calendar-alt text-muted me-1"></i>
+                                        <?= date('d/m/Y H:i', strtotime($user['created_at'])) ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="?url=admin/users/show/<?= $user['id'] ?>" 
+                                           class="btn btn-sm btn-outline-secondary me-1">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="?url=admin/users/edit/<?= $user['id'] ?>" 
+                                           class="btn btn-sm btn-outline-primary me-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                onclick="if(confirm('Tem certeza que deseja excluir este usuário?')) 
+                                                        window.location.href='?url=admin/users/delete/<?= $user['id'] ?>'">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../../layouts/base.php';
+?>

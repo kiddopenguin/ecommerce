@@ -16,7 +16,7 @@ class AuthController
 
     public function loginForm()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
         require __DIR__ . '/../View/auth/login.php';
     }
 
@@ -42,7 +42,7 @@ class AuthController
 
     public function logout()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
         unset($_SESSION['user']);
         header("Location: ?url=auth/login");
         exit;

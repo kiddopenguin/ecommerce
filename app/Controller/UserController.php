@@ -36,7 +36,7 @@ class UserController
 
     public function store()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -79,7 +79,7 @@ class UserController
 
     public function update($id)
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -111,7 +111,7 @@ class UserController
 
     public function delete($id)
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
         $this->userModel->delete($id);
         $_SESSION['success'] = "Usuário removido com sucesso!";
         header('Location: ?url=admin/users');

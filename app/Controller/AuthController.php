@@ -70,7 +70,8 @@ class AuthController
             $errors[] = "Nome é obrigatório.";
         }
 
-        if (empty($email) || filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Verifica se email está vazio ou inválido
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Email inválido.";
         }
 

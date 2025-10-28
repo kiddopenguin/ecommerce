@@ -5,12 +5,7 @@
 
 use App\Core\Router;
 
-$authMiddleware = function () {
-    if (isset($_SESSION['user'])) {
-        header('Location: ?url=auth/login');
-        exit;
-    }
-};
+$authMiddleware = null; // Middleware desativado durante desenvolvimento
 
 
 $router = new Router;

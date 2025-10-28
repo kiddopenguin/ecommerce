@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use PDO;
+use App\Database\Database;
 
 class User
 {
@@ -10,8 +11,7 @@ class User
 
     public function __construct()
     {
-        $this->pdo = new PDO('mysql:host=localhost;dbname=ecommerce', 'root', '');
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->pdo = (new Database())->pdo;
     }
 
     public function findByEmail($email)
@@ -72,7 +72,7 @@ class User
 
     public function emailExists($email, $ignoreId = null)
     {
-        $query = "SELECT COUNT(*) FROM tb_users WHERE email = ?";
+        $query = "SELECT COUNT(*) AS total FROM tb_users WHERE email = ?";
         $params = [$email];
 
         if ($ignoreId) {
@@ -83,6 +83,12 @@ class User
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total'] > 0;
+
+        $count = 0;
+        if ($result) {
+            $count = (int) ($result['total'] ?? ($result[0] ?? 0));
+        }
+
+        return $count > 0;
     }
 }
